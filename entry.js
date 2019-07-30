@@ -17,8 +17,8 @@
 // import testSymbol from './symbol'
 // testSymbol()
 
-import testThis from './src/this-that'
-testThis()
+// import testThis from './src/this-that'
+// testThis()
 
 // import testClosure from './closure'
 // testClosure()

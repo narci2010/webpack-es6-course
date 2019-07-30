@@ -1,5 +1,15 @@
+// import { autobind } from 'core-decorators'
 export default function testDecorator() {
   // ES7 的 decorator 概念
+
+  //   基本上，装饰器的行为就是下面这样。
+  // 装饰器是一个对类进行处理的函数。装饰器函数的第一个参数，就是所要装饰的目标类。
+  // 装饰器对类的行为的改变，是代码编译时发生的，而不是在运行时。这意味着，装饰器能在编译阶段运行代码。也就是说，装饰器本质就是编译时执行的函数。
+  // @decorator
+  // class A {}
+  // 等同于
+  // class A {}
+  // A = decorator(A) || A;
 
   // (1) 作用在方法上的 decorator
   // 先来看一个简单的类：
@@ -84,14 +94,12 @@ export default function testDecorator() {
   }
 
   // 高级点的装饰器
-  const memory = () => {
+  const memory = someClass => {
     const cache = Object.create(null) // 利用闭包的特性，保留一个Object用于缓存函数返回值
     return (target, name, descriptor) => {
+      // console.log(A) //undefined
       //method缓存真实的函数
       const method = descriptor.value
-      console.log('mehtod:' + method)
-      console.log('target:' + target)
-      console.log('name:' + name)
       descriptor.value = function(...args) {
         // console.log('mehtod2:' + method)
         const key = args.join('')
@@ -99,10 +107,13 @@ export default function testDecorator() {
         if (cache[key]) {
           return cache[key]
         }
-        const ret = method.apply(target, args)
+        //    const ret = method.call(target, ...args)
+        //    const obj = Reflect.construct(target)
+        //    const ret = method.apply(target, args)
+        const ret = method.apply(this, args)
         cache[key] = ret
         //缓存中间计算结果
-        console.log('cache[key]:' + cache[key])
+        //    console.log('cache[key]:' + cache[key])
         return ret
       }
       return descriptor
@@ -116,18 +127,49 @@ export default function testDecorator() {
     //     constructor(i) {
     //       this.i = i
     //     }
-    @memory() // 实际上是memory函数的返回值作为装饰器
+    //     @autobind
+    // 在类A自己内无法访问A，这个跟Java不一样，故此处A是undefined
+    @memory(A) // 实际上是memory函数的返回值作为装饰器
     fib(n) {
-      console.log('go:' + this.i)
+      console.log('go:' + this.i++)
       if (n === 1) return 1
       if (n === 2) return 1
       return this.fib(n - 1) + this.fib(n - 2)
     }
   }
+  //   console.log(A) 能够打印A
   const a = new A(0)
-  console.log(a.fib(10)) // 算的飞快！
-  console.log(a.i)
+  //   console.log(a)
+  console.log(a.fib(150)) // 算的飞快！
+  //   let fib = a.fib
+  //   fib.apply(a, [10])
+  //   fib.call(a, 10)
+  //   console.log(a.i)
   //   console.log(a.fib(100)) // 算的飞快！
   //   console.log(a.fib(100)) // 算的飞快！
   //end line here
+
+  function mixins(...list) {
+    //...表示多个参数，不定项参数
+    return function(target) {
+      Object.assign(target.prototype, ...list)
+    }
+  }
+  const Foo1 = {
+    a: 10,
+    foo1() {
+      console.log('foo1:' + this.a)
+    }
+  }
+  const Foo2 = {
+    a2: 100,
+    foo2() {
+      console.log('foo2:' + this.a2)
+    }
+  }
+  @mixins(Foo1, Foo2)
+  class MyClass {}
+  let obj = new MyClass()
+  obj.foo1() // 'foo1'
+  obj.foo2() // 'foo1'
 }

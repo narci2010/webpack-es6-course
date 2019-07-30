@@ -191,3 +191,26 @@ npm i @babel/plugin-proposal-class-properties -D
 ],
 "plugins": ["@babel/proposal-class-properties"]
 }
+
+npm install core-decorators -D
+import { autobind } from 'core-decorators';
+
+@autobind
+class Person {
+getPerson() {
+return this;
+}
+
+getPersonAgain() {
+return this;
+}
+}
+
+let person = new Person();
+let { getPerson, getPersonAgain } = person;
+
+getPerson() === person;
+// true
+
+getPersonAgain() === person;
+// true

@@ -252,7 +252,7 @@ export default function testThis() {
   tm.print()
   Object.defineProperty(TestMe.prototype, 'print', {
     value: function() {
-      console.log('testme.')
+      console.log('testmeII.' + this.a) //100
     },
     enumerable: true,
     configurable: true,
