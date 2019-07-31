@@ -26,5 +26,8 @@
 // import testAnony from './anonymous'
 // testAnony()
 
-import testDecorator from './src/decorator'
-testDecorator()
+// import testDecorator from './src/decorator'
+// testDecorator()
+
+import testEsclass from './src/esclass'
+testEsclass()
