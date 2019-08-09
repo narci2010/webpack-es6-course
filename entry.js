@@ -29,5 +29,8 @@
 // import testDecorator from './src/decorator'
 // testDecorator()
 
-import testEsclass from './src/esclass'
-testEsclass()
+// import testEsclass from './src/esclass'
+// testEsclass()
+
+import testEsclassextends from './src/esclassextends'
+testEsclassextends()

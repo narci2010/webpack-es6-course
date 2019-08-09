@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build2": "babel src/modules.js -d dist",
+    "start": "npm run build2 && node dist/modules.js",
     "build": "webpack",
     "dev": "webpack-dev-server --hot --inline --open"
   },
