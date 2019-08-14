@@ -204,3 +204,37 @@ import _, { each, forEach } from 'lodash'
 //   // ...·
 // });
 // 上面代码中，export1和export2都是myModule.js的输出接口，可以解构获得。
+
+// 如果模块有default输出接口，可以用参数直接获得。
+// import('./myModule.js')
+// .then(myModule => {
+//   console.log(myModule.default);
+// });
+// 上面的代码也可以使用具名输入的形式。
+// import('./myModule.js')
+// .then(({default: theDefault}) => {
+//   console.log(theDefault);
+// });
+
+// 如果想同时加载多个模块，可以采用下面的写法。
+// Promise.all([
+//   import('./module1.js'),
+//   import('./module2.js'),
+//   import('./module3.js'),
+// ])
+// .then(([module1, module2, module3]) => {
+//    ···
+// });
+
+// import()也可以用在 async 函数之中。
+// async function main() {
+//   const myModule = await import('./myModule.js');
+//   const {export1, export2} = await import('./myModule.js');
+//   const [module1, module2, module3] =
+//     await Promise.all([
+//       import('./module1.js'),
+//       import('./module2.js'),
+//       import('./module3.js'),
+//     ]);
+// }
+// main();

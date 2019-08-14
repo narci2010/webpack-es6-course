@@ -32,5 +32,20 @@
 // import testEsclass from './src/esclass'
 // testEsclass()
 
-import testEsclassextends from './src/esclassextends'
-testEsclassextends()
+// import testEsclassextends from './src/esclassextends'
+// testEsclassextends()
+
+// import testBase from './src/base-let-const'
+// testBase()
+
+// 导入模块，会自动执行模块的代码
+// import * as a from './src/base-variant'
+// import './src/base-variant'
+
+// import './src/base-string'
+
+// import './src/base-regexp'
+
+// import './src/base-number'
+
+import './src/base-function'
