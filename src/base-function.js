@@ -299,3 +299,110 @@ console.log(add(2, 5, 3)) // 10
 // (function(a) {}).length  // 1
 // (function(...a) {}).length  // 0
 // (function(a, ...b) {}).length  // 1
+
+// 严格模式
+// 从 ES5 开始，函数内部可以设定为严格模式。
+function doSomething(a, b) {
+  'use strict'
+  console.log(a, b)
+}
+doSomething(1, 2)
+// ES2016 做了一点修改，规定只要函数参数使用了默认值、解构赋值、或者扩展运算符，那么函数内部就不能显式设定为严格模式，否则会报错。
+// 报错
+// function doSomething2(a, b = a) {
+//   'use strict'
+//   console.log(a, b)
+// }
+
+// 箭头函数
+// 基本用法
+// ES6 允许使用“箭头”（=>）定义函数。
+var ff = v => v
+var value = ff(100)
+console.log(value)
+// 等同于
+// var f = function (v) {
+//   return v;
+// };
+
+// 如果箭头函数不需要参数或需要多个参数，就使用一个圆括号代表参数部分。
+// var f = () => 5;
+// // 等同于
+// var f = function () { return 5 };
+// var sum = (num1, num2) => num1 + num2;
+// // 等同于
+// var sum = function(num1, num2) {
+//   return num1 + num2;
+// };
+
+// 由于大括号被解释为代码块，所以如果箭头函数直接返回一个对象，必须在对象外面加上括号，否则会报错。
+// 报错
+// let getTempItem1 = id => { id: id, name: "Temp" };
+// 不报错
+let getTempItem2 = id => ({ id: id, name: 'Temp' })
+console.log(getTempItem2(100))
+
+// 下面是一种特殊情况，虽然可以运行，但会得到错误的结果。
+let foo100 = () => {
+  a: 1
+}
+console.log(foo100()) // undefined
+// 上面代码中，原始意图是返回一个对象{ a: 1 }，但是由于引擎认为大括号是代码块，所以执行了一行语句a: 1。
+// 这时，a可以被解释为语句的标签，因此实际执行的语句是1;，然后函数就结束了，没有返回值。
+
+// 箭头函数可以与变量解构结合使用。
+// const full = ({ first, last }) => first + ' ' + last;
+// // 等同于
+// function full(person) {
+//   return person.first + ' ' + person.last;
+// }
+// 箭头函数使得表达更加简洁。
+// const isEven = n => n % 2 === 0;
+// const square = n => n * n;
+// 上面代码只用了两行，就定义了两个简单的工具函数。如果不用箭头函数，可能就要占用多行，而且还不如现在这样写醒目。
+
+// 箭头函数的一个用处是简化回调函数。
+// 正常函数写法
+// [1,2,3].map(function (x) {
+//   return x * x;
+// });
+// 箭头函数写法
+console.log([1, 2, 3].map(x => x * x))
+
+// 使用注意点
+// 箭头函数有几个使用注意点。
+// （1）函数体内的this对象，就是定义时所在的对象，而不是使用时所在的对象。
+// （2）不可以当作构造函数，也就是说，不可以使用new命令，否则会抛出一个错误。
+// （3）不可以使用arguments对象，该对象在函数体内不存在。如果要用，可以用 rest 参数代替。
+// （4）不可以使用yield命令，因此箭头函数不能用作 Generator 函数。
+// 上面四点中，第一点尤其值得注意。this对象的指向是可变的，但是在箭头函数中，它是固定的。
+function foo501() {
+  setTimeout(() => {
+    console.log('id:', this.id)
+  }, 100)
+}
+var id = 21
+foo501.call({ id: 42 })
+// id: 42
+
+// 不适用场合
+// 由于箭头函数使得this从“动态”变成“静态”，下面两个场合不应该使用箭头函数。
+// 第一个场合是定义对象的方法，且该方法内部包括this。
+// const cat = {
+//   lives: 9,
+//   jumps: () => {
+//     this.lives--;
+//   }
+// }
+// 上面代码中，cat.jumps()方法是一个箭头函数，这是错误的。调用cat.jumps()时，如果是普通函数，该方法内部的this指向cat；
+// 如果写成上面那样的箭头函数，使得this指向全局对象，因此不会得到预期结果。这是因为对象不构成单独的作用域，
+// 导致jumps箭头函数定义时的作用域就是全局作用域。
+// 第二个场合是需要动态this的时候，也不应使用箭头函数。
+// var button = document.getElementById('press');
+// button.addEventListener('click', () => {
+//   this.classList.toggle('on');
+// });
+// 上面代码运行时，点击按钮会报错，因为button的监听函数是一个箭头函数，导致里面的this就是全局对象。
+// 如果改成普通函数，this就会动态指向被点击的按钮对象。
+// 另外，如果函数体很复杂，有许多行，或者函数内部有大量的读写操作，不单纯是为了计算值，这时也不应该使用箭头函数，
+// 而是要使用普通函数，这样可以提高代码可读性。

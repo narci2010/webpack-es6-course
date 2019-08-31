@@ -48,4 +48,16 @@
 
 // import './src/base-number'
 
-import './src/base-function'
+// import './src/base-function'
+
+// import './src/base-array'
+
+// import './src/base-object'
+
+// import './src/base-set-map'
+
+// import './src/async-await'
+
+// import './src/array-buffer'
+
+import './src/proxy-reflect'
